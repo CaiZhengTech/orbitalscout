@@ -102,3 +102,48 @@ can score.
 
 A null result is a reportable finding. S2 was cut on the same rule the day
 before and the repository is better for the record, not worse.
+
+---
+
+## Outcome, same day
+
+**S3 was cut.** S1+S3 scores 19.5% to 32.1% worse than S1 alone on lift over
+B1b, at all four budgets. Numbers in `RESULTS.md`.
+
+**Two of the four predictions failed.** Prediction 3, the one that decides
+admission, held. Predictions 1 and 2 did not, and both were wrong in the same
+way: the algebra was right about direction and wrong about magnitude.
+
+Prediction 1 said S3 alone would score below random because it is loaded
+positively on the NDVI residual that the label is built from. Measured, the
+rank correlation between S3 and S1 is only -0.136. Standardising each index
+within field-year and averaging the two early ones dilutes the NDVI term far
+more than the derivation assumed, and S3 lands slightly above chance rather
+than below it.
+
+Prediction 2 said the NDVI terms would cancel in the rung 2 sum, checkable as
+Spearman above 0.90 against the early-index mean. Measured 0.843. The
+derivation treated `z(S3)` as arriving on the same scale as
+`z(residual_ndvi)`, but rung 2 standardises S3 as a whole and leaves some NDVI
+behind. The direction held: S1+S3 correlates 0.843 with the early-index mean
+against 0.584 with S1.
+
+Prediction 4's fork resolved toward the indices rather than toward S3's form.
+The aggregation variant also fails to beat S1 on the primary label, by 0.1% to
+2.6%, so this is not a case of a real signal wasted by a bad contrast.
+
+The mechanism was then measured rather than argued. Across 3,432,652 feature
+cells the three indices correlate at 0.960 for NDVI against NDRE and 0.909
+against NDWI. Adding indices that correlate above 0.9 cannot add much, and
+contrasting them leaves a residue dominated by measurement noise. Section 7's
+premise, that NDWI and NDRE move before NDVI, is a claim about within-season
+timing; this evaluation carries one residual per zone-year from the latest
+supported feature cell, and at that grain the three indices are nearly the same
+measurement. Whether the premise holds per date is a different experiment and
+this one does not answer it.
+
+One result went the other way and is reported because it was measured: on the
+secondary level label the all-three level beats S1, 1.271 against 1.234 at the
+20-zone budget. Averaging correlated measurements estimates a level better. It
+does not estimate an anomaly better, and the anomaly is what the admission rule
+asks about.
